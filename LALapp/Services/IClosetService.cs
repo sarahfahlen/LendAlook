@@ -1,8 +1,8 @@
 using Core;
-namespace LAL_app;
+namespace LALapp;
 public interface IClosetService
 {
-    Task GetAll();
+    Task<tøj> GetAll();
     Task AddItem();
     Task DeleteById();
     Task UpdateItem();

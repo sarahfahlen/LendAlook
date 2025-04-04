@@ -1,4 +1,4 @@
-namespace LAL_app;
+namespace LALapp;
 
 public interface ILoginService
 {
