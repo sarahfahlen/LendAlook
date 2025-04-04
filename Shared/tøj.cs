@@ -10,4 +10,5 @@ public class tøj
    public bool reserveret { get; set; } = false;
    public string beskrivelse { get; set; } = "";
    public string img { get; set; } = "";
+	
 }
