@@ -1,9 +1,88 @@
+@using Core
+@using LALapp.Components
 @inject NavigationManager navManager
 @inject ILoginService lService
+@inject IClosetService cService
 @page "/closetPage"
 <h3>closetPage</h3>
 
+<ModalDialog @ref="@addToDialog" Title="Tilføj nyt stykke tøj">
+    <EditForm Model="@aItem" OnValidSubmit="@HandleSubmit" class="row p-3">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="col-md-6 mb-3">
+            <label for="kategori"> Kategori </label>
+            <InputSelect id="kategori" @bind-Value="aItem.type" class="form-control">
+                @foreach (var anOption in options)
+                {
+                    <option value="@anOption">@anOption</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="Størrelse">Størrelse</label>
+            <InputText id="Størrelse" @bind-Value="aItem.størrelse" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="Farve">Farve</label>
+            <InputText id="Farve" @bind-Value="aItem.farve" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="Mærke">Mærke</label>
+            <InputText id="Mærke" @bind-Value="aItem.mærke" class="form-control" />
+        </div>
+        <div class="col-md-12 mb-3">
+            <label for="Description">Beskrivelse</label>
+            <InputTextArea id="Description" @bind-Value="aItem.beskrivelse" class="form-control" />
+        </div>
+        <div class="col-12 mb-3">
+            <button type="submit">Tilføj</button>
+        </div>
+    </EditForm>
+</ModalDialog>
+
+
+<table class="table table-striped">
+    <thead>
+    <tr> <!-- her skal noget filter på-->
+        <th>Type</th>
+        <th>Størrelse</th>
+        <th>Farve</th>
+        <th>Mærke</th>
+        <th>Beskrivelse</th>
+        <th>Ledig?</th><!-- her skal if statement på med dato hvis ikke ledig-->
+        <!-- her skal tilføjes kontaktoplysninger og billede -->
+    </tr>
+    </thead> 
+    <tbody>
+    @foreach (var item in items)
+    {
+        <tr>
+            <td>@item.type</td>
+            <td>@item.størrelse</td>
+            <td>@item.farve</td>
+            <td>@item.mærke</td>
+            <td>@item.beskrivelse</td>
+            <td>@item.reserveret</td>
+            <!-- her skal tilføjes kontaktoplysninger og billede -->
+            <td><button @onclick="() => Delete(item)">Slet denne item</button></td> <!-- her skal if statement på-->
+            <td><button @onclick="() => Update(item)">Rediger denne item</button></td><!-- her skal if statement på-->
+            <td><button @onclick="() => Book(item)">Book denne item</button></td> <!-- her skal noget dato valg på-->
+                <!-- her skal værdien af den der booker tøjet bindes - måske?? -->
+        </tr>
+    }
+    </tbody>
+</table>
+
+<button @onclick="Open">Tilføj nyt tøj</button>
+<!-- her skal værdien af den der opretter tøjet bindes - i forhold til kontaktoplysninger-->
+
+
 @code {
+    ModalDialog? addToDialog { get; set; }
+    private tøj aItem = new();
+    private string[] options = {"Overdele", "Bukser", "Nederdele", "Kjoler", "Andet" };
+    private List<tøj> items = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -12,5 +91,48 @@
         {
             navManager.NavigateTo("loginPage/closetPage");
         }
+
+        await GetAll();
+    }
+    private void Open()
+    {
+        addToDialog.Open();
+    }
+    private async Task GetAll()
+    {
+        tøj[] items2 = await cService.GetAll();
+        items = items2.ToList();
+    }
+    
+    private async Task HandleSubmit()
+    { 
+        items.Add(aItem); //bethandler visningen
+        await cService.AddItem(aItem);
+        aItem = new tøj();
+        addToDialog.Close();
+    }
+    
+    private async Task Delete(tøj item)
+    {
+        items.Remove(item); //behandler visningen
+        await cService.DeleteById(item.id); 
+    }
+    
+    private async Task Update(tøj item)
+    {
+        //noget kode der tillader redigering her - både visning og backend
+        await cService.UpdateItem(item);
+    }
+    private async Task Book(tøj item)
+    {
+        item.reserveret = !item.reserveret; //ændrer status
+        DateOnly slut = item.slutDato;
+        await cService.BookItem(item, slut);
+        await GetAll();
+    }
+
+    private async Task Filter(string? type, string? farve, string? størrelse, bruger? udlåner, bool? ledig)
+    {
+        //await cService.FilterBy();
     }
 }

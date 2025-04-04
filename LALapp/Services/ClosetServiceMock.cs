@@ -3,7 +3,11 @@ namespace LALapp;
 
 public class ClosetServiceMock : IClosetService
 {
-   public List<tøj> altTøj = new();
+   public static tøj test1 = new tøj { id = 1, type = "bluse", størrelse = "small", beskrivelse = "efe", farve = "blå"};
+   public static tøj test2 = new tøj { id = 2, type = "bukser", størrelse = "medium", beskrivelse = "rth", farve = "sort"};
+   
+   public List<tøj> altTøj = new List<tøj>{test1, test2};
+
 
    public async Task<tøj[]> GetAll()
    {
