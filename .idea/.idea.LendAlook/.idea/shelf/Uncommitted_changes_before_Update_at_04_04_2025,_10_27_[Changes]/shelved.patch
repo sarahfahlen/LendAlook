@@ -1,0 +1,17 @@
+Index: Shared/tøj.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Shared/tøj.cs b/Shared/tøj.cs
+new file mode 100644
+--- /dev/null	(date 1743755237155)
++++ b/Shared/tøj.cs	(date 1743755237155)
+@@ -0,0 +1,6 @@
++namespace Shared;
++
++public class tøj
++{
++    
++}
+\ No newline at end of file
