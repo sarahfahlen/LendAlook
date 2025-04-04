@@ -1,6 +1,38 @@
-@page "/loginPage"
-<h3>loginPage</h3>
+@page "/loginPage/{target:alpha}"
+@using LALapp.Services
+@inject NavigationManager navManager
+@inject ILoginService loginService
+
+<h3>Login</h3>
+$
+<div class="form-group">
+    <label>Brugernavn</label>
+    <InputText class="form-control" @bind-Value="username" />
+</div>
+<div class="form-group">
+    <label>Password</label>
+    <InputText class="form-control" type="password" @bind-Value="password" />
+</div>
+<div class="form-group mt-2">
+    <button class="btn btn-primary" @onclick="OnClickLogin">Login</button>
+</div>
+<p class="text-danger">@errorText</p>
+
 
 @code {
+    string username = "";
+    string password = "";
+    string errorText = "";
     
+    [Parameter]
+    public string target { get; set; }
+
+    private async Task OnClickLogin()
+    {
+        var succes = await loginService.Login(username, password);
+        if (!succes)
+            errorText = "No match found - retry...";
+        else
+            navManager.NavigateTo(target);
+    }
 }

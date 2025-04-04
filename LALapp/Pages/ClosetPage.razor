@@ -1,6 +1,16 @@
+@inject NavigationManager navManager
+@inject ILoginService lService
 @page "/closetPage"
 <h3>closetPage</h3>
 
 @code {
-    
+
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedIn = await lService.GetUserLoggedIn();
+        if (loggedIn is null)
+        {
+            navManager.NavigateTo("login/todo");
+        }
+    }
 }
