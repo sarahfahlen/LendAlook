@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LAL app", "LAL app\LAL app.csproj", "{89E692EB-9963-494E-90EF-F6CD1BD8F3F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{F968823D-9E3F-49A3-AC98-20FF296D9756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAPI", "ServerAPI\ServerAPI.csproj", "{26CE9A04-85DB-4481-9804-2030D85C00BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{89E692EB-9963-494E-90EF-F6CD1BD8F3F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89E692EB-9963-494E-90EF-F6CD1BD8F3F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89E692EB-9963-494E-90EF-F6CD1BD8F3F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F968823D-9E3F-49A3-AC98-20FF296D9756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F968823D-9E3F-49A3-AC98-20FF296D9756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F968823D-9E3F-49A3-AC98-20FF296D9756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F968823D-9E3F-49A3-AC98-20FF296D9756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CE9A04-85DB-4481-9804-2030D85C00BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CE9A04-85DB-4481-9804-2030D85C00BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CE9A04-85DB-4481-9804-2030D85C00BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CE9A04-85DB-4481-9804-2030D85C00BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
