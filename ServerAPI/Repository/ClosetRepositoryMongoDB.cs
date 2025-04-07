@@ -9,36 +9,68 @@ namespace ServerAPI.Repository
 {
     public class ClosetRepositoryMongoDB : IClosetRepository
     {
-        private readonly IMongoCollection<tøj> _collection;
+        
+        private IMongoClient client;
+        private readonly IMongoCollection<tøj> tøjcollection;
 
         public ClosetRepositoryMongoDB()
         {
-            var connectionString = "mongodb+srv://App:app1234@lalapp.mgblbd3.mongodb.net/?retryWrites=true&w=majority&appName=LALApp";
-            var client = new MongoClient(connectionString);
-            var database = client.GetDatabase("LALApp"); 
-            _collection = database.GetCollection<tøj>("clothes"); 
+            // atlas database
+            //var password = ""; //add
+            //var mongoUri = $"mongodb+srv://olee58:{password}@cluster0.olmnqak.mongodb.net/?retryWrites=true&w=majority";
+           
+            //local mongodb
+            var mongoUri = "mongodb://localhost:27017/";
+            
+            try
+            {
+                client = new MongoClient(mongoUri);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("There was a problem connecting to your " +
+                                  "Atlas cluster. Check that the URI includes a valid " +
+                                  "username and password, and that your IP address is " +
+                                  $"in the Access List. Message: {e.Message}");
+                throw; }
+
+            // Provide the name of the database and collection you want to use.
+            var dbName = "LALCloset";
+            var collectionName = "Clothes";
+
+            tøjcollection = client.GetDatabase(dbName)
+                .GetCollection<tøj>(collectionName);
         }
 
 
         public tøj[] GetAll()
         {
-            return _collection.Find(new BsonDocument()).ToList().ToArray();
+            return tøjcollection.Find(new BsonDocument()).ToList().ToArray();
         }
 
         public void Add(tøj item)
         {
-            _collection.InsertOne(item);
+            tøjcollection.InsertOne(item);
         }
 
         public void Remove(int id)
         {
-            _collection.DeleteOne(t => t.id == id);
+            tøjcollection.DeleteOne(t => t.id == id);
         }
 
-        public void Update(int id, bool isDone)
+        public void Update(tøj item)
         {
-            var update = Builders<tøj>.Update.Set("isDone", isDone); 
-            _collection.UpdateOne(t => t.id == id, update);
+            var updateDef = Builders<tøj>.Update
+                .Set(x => x.type, item.type)
+                .Set(x => x.størrelse, item.størrelse)
+                .Set(x => x.farve, item.farve)
+                .Set(x => x.mærke, item.mærke)
+                .Set(x => x.beskrivelse, item.beskrivelse)
+                .Set(x => x.img, item.img)
+                .Set(x => x.slutDato, item.slutDato)
+                .Set(x => x.reserveret, item.reserveret);
+            tøjcollection.UpdateOne(x => x.id == item.id, updateDef);
+            
         }
     }
 }

@@ -28,10 +28,11 @@ public class ClosetServiceServer : IClosetService
         await client.DeleteAsync($"{serverUrl}/api/closetPage/{id}");
     }
 
-    public Task UpdateItem(tøj item)
+    public async Task UpdateItem(tøj item)
     {
-        throw new NotImplementedException();
+        await client.PutAsJsonAsync($"{serverUrl}/api/closetPage", item);
     }
+
 
     public Task BookItem(tøj item, DateOnly slutDato)
     {
