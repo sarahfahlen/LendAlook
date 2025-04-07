@@ -12,6 +12,7 @@ namespace ServerAPI.Repository
         
         private IMongoClient client;
         private readonly IMongoCollection<tøj> tøjcollection;
+        private readonly IMongoCollection<tøj> usercollection;
 
         public ClosetRepositoryMongoDB()
         {
@@ -42,20 +43,41 @@ namespace ServerAPI.Repository
                 .GetCollection<tøj>(collectionName);
         }
 
-
-        public tøj[] GetAll()
-        {
-            return tøjcollection.Find(new BsonDocument()).ToList().ToArray();
-        }
-
         public void Add(tøj item)
         {
+            var max = 0;
+            if (tøjcollection.Count(Builders<tøj>.Filter.Empty) > 0)
+            {
+                max = MaxId();
+            }
+            item.id = max + 1;
+            // alternative:
+            //int newid = Guid.NewGuid().GetHashCode();
+            //item.Id = newid;
             tøjcollection.InsertOne(item);
+        }
+        
+        private int MaxId() {
+            /*var noFilter = Builders<BEBike>.Filter.Empty;
+            var elementWithHighestId = collection.Find(noFilter).SortByDescending(r => r.Id).Limit(1).ToList()[0];
+            return elementWithHighestId.Id;*/
+            return GetAll().Select(b => b.id).Max();
         }
 
         public void Remove(int id)
         {
-            tøjcollection.DeleteOne(t => t.id == id);
+            var deleteResult = tøjcollection
+                .DeleteOne(Builders<tøj>.Filter.Where(r => r.id == id));
+        }
+        
+        public tøj[] GetAll() {
+            var noFilter = Builders<tøj>.Filter.Empty;
+            var items = tøjcollection.Find(noFilter).ToList();
+            foreach (var item in items)
+            {
+                var item.ejer = usercollection(id skal passe til item.ejerId);
+            }
+            return items.ToArray();
         }
 
         public void Update(tøj item)
