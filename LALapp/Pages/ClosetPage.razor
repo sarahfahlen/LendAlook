@@ -90,8 +90,8 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
                     <p>Ledig igen d. @item.slutDato;</p>
                 }
             </td>
-            <td> @item.ejer.brugernavn
-                @item.ejer.mobil</td>
+            <td> @item.ejer?.brugernavn
+                @item.ejer?.mobil</td>
             <td>
                 @if (!string.IsNullOrWhiteSpace(item.img))
                 {
@@ -172,8 +172,8 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
         }
         else //hvis vi er i tilføjelses "mode" sker dette
         {
-            items.Add(aItem); //bethandler visningen
-            aItem.ejer = loggedIn;
+            aItem.ejerId = loggedIn?.id; // 👈 kun ejerId!
+            aItem.ejer = null;           // 👈 undgå at sende ejer-objekt
             await cService.AddItem(aItem);
         }
 
