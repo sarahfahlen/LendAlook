@@ -42,20 +42,36 @@ namespace ServerAPI.Repository
                 .GetCollection<tøj>(collectionName);
         }
 
-
-        public tøj[] GetAll()
-        {
-            return tøjcollection.Find(new BsonDocument()).ToList().ToArray();
-        }
-
         public void Add(tøj item)
         {
-            tøjcollection.InsertOne(item);
+            var max = 0;
+            if (todoCollection.Count(Builders<ToDoItem>.Filter.Empty) > 0)
+            {
+                max = MaxId();
+            }
+            item.Id = max + 1;
+            // alternative:
+            //int newid = Guid.NewGuid().GetHashCode();
+            //item.Id = newid;
+            todoCollection.InsertOne(item);
+        }
+        
+        private int MaxId() {
+            /*var noFilter = Builders<BEBike>.Filter.Empty;
+            var elementWithHighestId = collection.Find(noFilter).SortByDescending(r => r.Id).Limit(1).ToList()[0];
+            return elementWithHighestId.Id;*/
+            return GetAll().Select(b => b.Id).Max();
         }
 
         public void Remove(int id)
         {
-            tøjcollection.DeleteOne(t => t.id == id);
+            var deleteResult = todoCollection
+                .DeleteOne(Builders<ToDoItem>.Filter.Where(r => r.Id == id));
+        }
+        
+        public ToDoItem[] GetAll() {
+            var noFilter = Builders<ToDoItem>.Filter.Empty;
+            return todoCollection.Find(noFilter).ToList().ToArray();
         }
 
         public void Update(tøj item)
