@@ -17,9 +17,9 @@
 /* Knapper */
 .add-button,
 .submit-button,
-.table button {
-    background-color: #7b8f78;
-    color: white;
+.book-button,
+.edit-button,
+.delete-button {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 6px;
@@ -27,56 +27,82 @@
     font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    color: white;
 }
 
+.add-button,
+.book-button {
+    background-color: #7b8f78;
+}
 .add-button:hover,
-.submit-button:hover,
-.table button:hover {
+.book-button:hover {
     background-color: #6b7d69;
 }
 
-/* Tabel */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+.edit-button {
+    background-color: #a59788;
+}
+.edit-button:hover {
+    background-color: #8e8375;
 }
 
-.table thead th {
-    background-color: #7b8f78 !important;
-    color: white !important;
+.delete-button {
+    background-color: #b76e6e;
+}
+.delete-button:hover {
+    background-color: #a25858;
 }
 
-.table td {
-    padding: 0.75rem 1rem;
-    text-align: left;
+.submit-button {
+    background-color: #7b8f78;
+}
+.submit-button:hover {
+    background-color: #6b7d69;
 }
 
-.table tbody tr:nth-child(even) {
-    background-color: #f3eee7;
+/* Kort-layout */
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
 }
 
-.table tbody tr:nth-child(odd) {
-    background-color: #fcfaf7;
+.item-card {
+    background-color: #f9f7f4;
+    border: 1px solid #e3ddd6;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.table td:last-child {
-    white-space: nowrap;
-}
-
-/* Billede */
 .item-image {
-    max-width: 80px;
-    max-height: 80px;
-    object-fit: cover;
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
 }
 
-/* Formular */
+.item-info p {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.item-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Formular og input */
 form {
     display: flex;
     flex-wrap: wrap;
@@ -165,7 +191,7 @@ textarea {
     background-position: center;
 }
 
-/* Knap i højre hjørne */
+/* Footer i form */
 .form-footer {
     width: 100%;
     display: flex;
@@ -179,5 +205,3 @@ textarea {
     font-size: 0.9rem;
     margin-top: 0.25rem;
 }
-
-

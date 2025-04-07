@@ -4,19 +4,21 @@
 @inject ILoginService lService
 @inject IClosetService cService
 @page "/closetPage"
+
 <h3>FællesSkabet</h3>
 <h5>Din garderobe – samlet ét sted 👚</h5>
-
-På denne side kan du tilføje, redigere og dele dine egne tøjitems med dine veninder. 
-Du kan også booke andres tøj og vælge, hvornår du afleverer det igen. 
-Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale garderobe.
+<p class="closet-intro">
+    På denne side kan du tilføje, redigere og dele dine egne tøjitems med dine veninder. 
+    Du kan også booke andres tøj og vælge, hvornår du afleverer det igen. 
+    Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale garderobe.
+</p>
 
 <ModalDialog @ref="@addToDialog" Title="@(isEditMode ? "Rediger dette stykke tøj" : "Tilføj nyt stykke tøj")">
     <EditForm Model="@aItem" OnValidSubmit="@HandleSubmit" class="row p-3">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
-            <label for="kategori"> Kategori</label>
+            <label for="kategori">Kategori</label>
             <InputSelect id="kategori" @bind-Value="aItem.type" class="form-control">
                 @foreach (var anOption in options)
                 {
@@ -25,16 +27,16 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
             </InputSelect>
         </div>
         <div class="form-group">
-            <label for="Størrelse">Størrelse</label>
-            <InputText id="Størrelse" @bind-Value="aItem.størrelse" class="form-control" />
+            <label>Størrelse</label>
+            <InputText @bind-Value="aItem.størrelse" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="Farve">Farve</label>
-            <InputText id="Farve" @bind-Value="aItem.farve" class="form-control" />
+            <label>Farve</label>
+            <InputText @bind-Value="aItem.farve" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="Mærke">Mærke</label>
-            <InputText id="Mærke" @bind-Value="aItem.mærke" class="form-control" />
+            <label>Mærke</label>
+            <InputText @bind-Value="aItem.mærke" class="form-control" />
         </div>
         <div class="form-group checkbox-group">
             <label class="custom-checkbox">
@@ -43,13 +45,13 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
                 Reserveret?
             </label>
         </div>
-        <div class="form group">
-            <label for="Description">Beskrivelse</label>
-            <InputTextArea id="Description" @bind-Value="aItem.beskrivelse" class="form-control" />
+        <div class="form-group">
+            <label>Beskrivelse</label>
+            <InputTextArea @bind-Value="aItem.beskrivelse" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="Link">Billede URL</label>
-            <InputText id="Link" @bind-Value="aItem.img" class="form-control" />
+            <label>Billede URL</label>
+            <InputText @bind-Value="aItem.img" class="form-control" />
         </div>
         <div class="form-footer">
             <button type="submit" class="submit-button">
@@ -59,62 +61,37 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
     </EditForm>
 </ModalDialog>
 
-
-<table class="table">
-    <thead>
-    <tr> <!-- her skal noget filter på-->
-        <th>Type</th>
-        <th>Størrelse</th>
-        <th>Farve</th>
-        <th>Mærke</th>
-        <th>Beskrivelse</th>
-        <th>Ledighed</th>
-        <th>Ejet af</th>
-        <th>Billede</th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead> 
-    <tbody>
+<div class="item-grid">
     @foreach (var item in items)
     {
-        <tr>
-            <td>@item.type</td>
-            <td>@item.størrelse</td>
-            <td>@item.farve</td>
-            <td>@item.mærke</td>
-            <td>@item.beskrivelse</td>
-            <td>@(@item.reserveret ? "Ikke ledig" : "Ledig")
-                @if (item.reserveret == true)
-                {
-                    <p>Ledig igen d. @item.slutDato;</p>
-                }
-            </td>
-            <td> @item.ejer?.brugernavn
-                @item.ejer?.mobil</td>
-            <td>
-                @if (!string.IsNullOrWhiteSpace(item.img))
-                {
-                    <img src="@item.img" alt="Tøjbillede" class="item-image" />
-                }
-            </td>
-            
-            @if (loggedIn?.id == item.ejer?.id)
+        <div class="item-card">
+            @if (!string.IsNullOrWhiteSpace(item.img))
             {
-                <td><button class="delete-button" @onclick="() => Delete(item)">Slet denne item</button></td>
-                <td><button class="edit-button" @onclick="() => Update(item)">Rediger denne item</button></td>
+                <img src="@item.img" alt="Tøjbillede" class="item-image" />
             }
-            else
-            {
-                @if (item.reserveret == false)
+            <div class="item-info">
+                <p><strong>Type:</strong> @item.type</p>
+                <p><strong>Størrelse:</strong> @item.størrelse</p>
+                <p><strong>Farve:</strong> @item.farve</p>
+                <p><strong>Mærke:</strong> @item.mærke</p>
+                <p><strong>Beskrivelse:</strong> @item.beskrivelse</p>
+                <p><strong>Status:</strong> @(item.reserveret ? "Reserveret indtil d. " + item.slutDato?.ToShortDateString() : "Ledig")</p>
+                <p><strong>Ejer:</strong> @item.ejer.brugernavn (@item.ejer.mobil)</p>
+            </div>
+            <div class="item-actions">
+                @if (loggedIn?.id == item.ejer?.id)
                 {
-                    <td><button class="book-button" @onclick="() => Book(item)">Book denne item</button></td>
+                    <button class="delete-button" @onclick="() => Delete(item)">Slet</button>
+                    <button class="edit-button" @onclick="() => Update(item)">Rediger</button>
                 }
-            }
-        </tr>
+                else if (!item.reserveret)
+                {
+                    <button class="book-button" @onclick="() => Book(item)">Book</button>
+                }
+            </div>
+        </div>
     }
-    </tbody>
-</table>
+</div>
 
 <button class="add-button" @onclick="Open">Tilføj nyt tøj</button>
 
@@ -133,8 +110,8 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
     private tøj aItem = new();
     private string[] options = { "Overdele", "Bukser", "Nederdele", "Kjoler", "Andet" };
     private List<tøj> items = new();
-    private bool isEditMode = false; //bruges til at skelne mellem tilføj og rediger item
-    private bruger? loggedIn; //gemmer den bruger som er logget ind
+    private bool isEditMode = false;
+    private bruger? loggedIn;
     ModalDialog? bookDialog { get; set; }
     private DateTime? valgtDato = DateTime.Today;
     private tøj? valgtItem;
@@ -147,7 +124,6 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
             navManager.NavigateTo("loginPage/closetPage");
             return;
         }
-
         await GetAll();
     }
 
@@ -166,14 +142,13 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
 
     private async Task HandleSubmit()
     {
-        if (isEditMode == true) //hvis vi er i redigerings "mode" sker dette
+        if (isEditMode)
         {
             await cService.UpdateItem(aItem);
         }
-        else //hvis vi er i tilføjelses "mode" sker dette
+        else
         {
-            aItem.ejerId = loggedIn?.id; // 👈 kun ejerId!
-            aItem.ejer = null;           // 👈 undgå at sende ejer-objekt
+            aItem.ejer = loggedIn;
             await cService.AddItem(aItem);
         }
 
@@ -184,8 +159,8 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
 
     private async Task Delete(tøj item)
     {
-        items.Remove(item); //behandler visningen
         await cService.DeleteById(item.id);
+        await GetAll();
     }
 
     private async Task Update(tøj item)
@@ -206,9 +181,9 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
     {
         if (valgtItem != null)
         {
-            valgtItem.reserveret = true; //ændrer reserveret til true
-            valgtItem.slutDato = valgtDato; //sætter slutdato til den valgte dato i kalenderen
-            await cService.BookItem(valgtItem, valgtDato); //sender til service, som opdaterer med valgte værdier
+            valgtItem.reserveret = true;
+            valgtItem.slutDato = valgtDato;
+            await cService.BookItem(valgtItem, valgtDato);
             bookDialog?.Close();
             await GetAll();
         }
@@ -218,5 +193,4 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
     {
         //await cService.FilterBy();
     }
-
 }
