@@ -4,7 +4,7 @@ namespace LALapp.Services;
 
 public class ClosetServiceServer : IClosetService
 {
-    private string serverUrl = "http://localhost:5251";
+    private string serverUrl = "http://localhost:5265";
     
     private HttpClient client;
 

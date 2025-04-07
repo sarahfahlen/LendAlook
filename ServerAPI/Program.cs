@@ -19,7 +19,7 @@ public class Program
                 });
         });
 
-        builder.Services.AddSingleton<IClosetRepository>();
+        builder.Services.AddSingleton<IClosetRepository, ClosetRepositoryMongoDB>();
 
 // Add services to the container.
 

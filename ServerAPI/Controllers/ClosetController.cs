@@ -10,41 +10,41 @@ public class ClosetController
     [Route("api/closetPage")]
     public class ToDoController : ControllerBase
     {
-        private IClosetRepository todoRepo;
+        private IClosetRepository closetRepo;
 
         public ToDoController(IClosetRepository todoRepo)
         {
-            this.todoRepo = todoRepo;
+            this.closetRepo = todoRepo;
         }
         
         [HttpGet]
         public IEnumerable<tøj> Get()
         {
-            return todoRepo.GetAll();
+            return closetRepo.GetAll();
         }
 
         [HttpPost]
         public void Add([FromBody] tøj item)
         {
-            todoRepo.Add(item);
+            closetRepo.Add(item);
         }
         
         [HttpDelete]
         [Route("{id}")]
         public void Remove(int id)
         {
-            Console.WriteLine($"Sletter todo med id {id}");
-            todoRepo.Remove(id);
+            Console.WriteLine($"Sletter tøj med id {id}");
+            closetRepo.Remove(id);
         }
         
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] bool isDone)
         {
-            var existingItem = todoRepo.GetAll().FirstOrDefault(t => t.id == id);
+            var existingItem = closetRepo.GetAll().FirstOrDefault(t => t.id == id);
             if (existingItem == null)
-                return NotFound("ToDo item not found");
+                return NotFound("Tøj item not found");
 
-            todoRepo.Update(id, isDone);
+            closetRepo.Update(id, isDone);
             return Ok();
         }
 

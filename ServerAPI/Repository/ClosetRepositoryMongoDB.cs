@@ -1,32 +1,44 @@
-/*using Core;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using ServerAPI.Repository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Core;
 
-namespace ServerAPI.Repository;
-
-public class ClosetRepositoryMongoDB : IClosetRepository
+namespace ServerAPI.Repository
 {
-    private IMongoClient client;
-        
-    private IMongoCollection<tøj> closetCollection;
+    public class ClosetRepositoryMongoDB : IClosetRepository
+    {
+        private readonly IMongoCollection<tøj> _collection;
 
-    public ClosetRepositoryMongoDB() {
-        // atlas database
-        //var password = ""; //add
-        //var mongoUri = $"mongodb+srv://olee58:{password}@cluster0.olmnqak.mongodb.net/?retryWrites=true&w=majority";
-           
-        //local mongodb
-        var mongoUri = "mongodb://localhost:27017/";
-            
-        try
+        public ClosetRepositoryMongoDB()
         {
-            client = new MongoClient(mongoUri);
+            var connectionString = "mongodb+srv://App:app1234@lalapp.mgblbd3.mongodb.net/?retryWrites=true&w=majority&appName=LALApp";
+            var client = new MongoClient(connectionString);
+            var database = client.GetDatabase("LALApp"); 
+            _collection = database.GetCollection<tøj>("clothes"); 
         }
-        catch (Exception e)
+
+
+        public tøj[] GetAll()
         {
-            Console.WriteLine("There was a problem connecting to your " +
-                              "Atlas cluster. Check that the URI includes a valid " +
-                              "username and password, and that your IP address is " +
-                              $"in the Access List. Message: {e.Message}");
-            throw; }
-}*/
+            return _collection.Find(new BsonDocument()).ToList().ToArray();
+        }
+
+        public void Add(tøj item)
+        {
+            _collection.InsertOne(item);
+        }
+
+        public void Remove(int id)
+        {
+            _collection.DeleteOne(t => t.id == id);
+        }
+
+        public void Update(int id, bool isDone)
+        {
+            var update = Builders<tøj>.Update.Set("isDone", isDone); 
+            _collection.UpdateOne(t => t.id == id, update);
+        }
+    }
+}
