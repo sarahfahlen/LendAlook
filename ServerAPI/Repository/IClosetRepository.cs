@@ -1,6 +1,13 @@
+using System.Collections.Generic;
+using Core;
+
 namespace ServerAPI.Repository;
 
-public class IClosetRepository
+public interface IClosetRepository
 {
-    
+    tøj[] GetAll(); 
+    void Add(tøj item); 
+    void Remove(int id);
+
+    void Update(int id, bool isDone);
 }
