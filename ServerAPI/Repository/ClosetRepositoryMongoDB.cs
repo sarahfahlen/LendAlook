@@ -17,11 +17,11 @@ namespace ServerAPI.Repository
         public ClosetRepositoryMongoDB()
         {
             // atlas database
-            //var password = ""; //add
-            //var mongoUri = $"mongodb+srv://olee58:{password}@cluster0.olmnqak.mongodb.net/?retryWrites=true&w=majority";
+            var password = "LAL1234";
+            var mongoUri = $"mongodb+srv://App:{password}@lalapp.mgblbd3.mongodb.net/?appName=LALApp";
            
             //local mongodb
-            var mongoUri = "mongodb://localhost:27017/";
+            //var mongoUri = "mongodb://localhost:27017/";
             
             try
             {
@@ -36,8 +36,8 @@ namespace ServerAPI.Repository
                 throw; }
 
             // Provide the name of the database and collection you want to use.
-            var dbName = "LALCloset";
-            var collectionName = "Clothes";
+            var dbName = "LALApp";
+            var collectionName = "clothes";
             var collectionUser = "Users";
 
             tøjcollection = client.GetDatabase(dbName)

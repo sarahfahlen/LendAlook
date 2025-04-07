@@ -34,9 +34,9 @@ public class ClosetServiceServer : IClosetService
     }
 
 
-    public Task BookItem(tøj item, DateTime? slutDato)
+    public async Task BookItem(tøj item, DateTime? slutDato)
     {
-        throw new NotImplementedException();
+        await UpdateItem(item);
     }
 
     public Task FilterBy(string? type, string? farve, string? størrelse, bruger? udlåner, bool? ledig)
