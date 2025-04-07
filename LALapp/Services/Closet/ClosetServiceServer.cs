@@ -34,7 +34,7 @@ public class ClosetServiceServer : IClosetService
     }
 
 
-    public Task BookItem(tøj item, DateOnly slutDato)
+    public Task BookItem(tøj item, DateTime? slutDato)
     {
         throw new NotImplementedException();
     }

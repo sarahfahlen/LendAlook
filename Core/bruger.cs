@@ -12,5 +12,5 @@ public class bruger
     public int? ejerid { get; set; }
     public bruger låner { get; set; }
     public int? lånerid { get; set; }
-    public DateOnly slutDag { get; set; }
+    public DateTime? slutDag { get; set; }
 }

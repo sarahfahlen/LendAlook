@@ -41,7 +41,7 @@ public class ClosetServiceMock : IClosetService
       
     }
 
-    public async Task BookItem(tøj item, DateOnly slut)
+    public async Task BookItem(tøj item, DateTime? slut)
     {
         tøj bookingItem = altTøj.FirstOrDefault(t => t.id == item.id);
         if (bookingItem != null)

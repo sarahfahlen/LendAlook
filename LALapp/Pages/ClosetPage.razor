@@ -136,7 +136,7 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
     private bool isEditMode = false; //bruges til at skelne mellem tilføj og rediger item
     private bruger? loggedIn; //gemmer den bruger som er logget ind
     ModalDialog? bookDialog { get; set; }
-    private DateOnly valgtDato = DateOnly.FromDateTime(DateTime.Today);
+    private DateTime? valgtDato = DateTime.Today;
     private tøj? valgtItem;
 
     protected override async Task OnInitializedAsync()
@@ -198,7 +198,7 @@ Hold styr på dine lån og udlån – alt sammen direkte i din egen digitale gar
     private async Task Book(tøj item)
     {
         valgtItem = item;
-        valgtDato = DateOnly.FromDateTime(DateTime.Today);
+        valgtDato = DateTime.Today;
         bookDialog?.Open();
     }
 

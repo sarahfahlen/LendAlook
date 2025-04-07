@@ -14,5 +14,5 @@ public class tøj
     public int? ejerId { get; set; } = 0;
     public bruger låner { get; set; }
     public int? lånerId { get; set; } = 0;
-    public DateOnly slutDato { get; set; }
+    public DateTime? slutDato { get; set; }
 }
