@@ -9,5 +9,5 @@ public interface IClosetRepository
     void Add(tøj item); 
     void Remove(int id);
 
-    void Update(int id, bool isDone);
+    void Update(tøj item);
 }
