@@ -80,10 +80,10 @@ namespace ServerAPI.Repository
 
             foreach (var item in items)
             {
-                // Henter bruger baseret på ejerId fra tøj-objektet
-                if (item.ejerId.HasValue)  // Tjekker om ejerId er sat
+                
+                if (item.ejerId.HasValue)  
                 {
-                    var ejer = usercollection.Find(u => u.id == item.ejerId.Value).FirstOrDefault();  // Henter bruger baseret på ejerId
+                    var ejer = usercollection.Find(u => u.id == item.ejerId.Value).FirstOrDefault(); 
                     if (ejer != null)
                     {
                         item.ejer = ejer;  // Tildeler ejer til tøj-objektet
