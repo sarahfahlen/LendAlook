@@ -12,6 +12,7 @@ namespace ServerAPI.Repository
         
         private IMongoClient client;
         private readonly IMongoCollection<tøj> tøjcollection;
+        private readonly IMongoCollection<tøj> usercollection;
 
         public ClosetRepositoryMongoDB()
         {
@@ -45,33 +46,38 @@ namespace ServerAPI.Repository
         public void Add(tøj item)
         {
             var max = 0;
-            if (todoCollection.Count(Builders<ToDoItem>.Filter.Empty) > 0)
+            if (tøjcollection.Count(Builders<tøj>.Filter.Empty) > 0)
             {
                 max = MaxId();
             }
-            item.Id = max + 1;
+            item.id = max + 1;
             // alternative:
             //int newid = Guid.NewGuid().GetHashCode();
             //item.Id = newid;
-            todoCollection.InsertOne(item);
+            tøjcollection.InsertOne(item);
         }
         
         private int MaxId() {
             /*var noFilter = Builders<BEBike>.Filter.Empty;
             var elementWithHighestId = collection.Find(noFilter).SortByDescending(r => r.Id).Limit(1).ToList()[0];
             return elementWithHighestId.Id;*/
-            return GetAll().Select(b => b.Id).Max();
+            return GetAll().Select(b => b.id).Max();
         }
 
         public void Remove(int id)
         {
-            var deleteResult = todoCollection
-                .DeleteOne(Builders<ToDoItem>.Filter.Where(r => r.Id == id));
+            var deleteResult = tøjcollection
+                .DeleteOne(Builders<tøj>.Filter.Where(r => r.id == id));
         }
         
-        public ToDoItem[] GetAll() {
-            var noFilter = Builders<ToDoItem>.Filter.Empty;
-            return todoCollection.Find(noFilter).ToList().ToArray();
+        public tøj[] GetAll() {
+            var noFilter = Builders<tøj>.Filter.Empty;
+            var items = tøjcollection.Find(noFilter).ToList();
+            foreach (var item in items)
+            {
+                var item.ejer = usercollection(id skal passe til item.ejerId);
+            }
+            return items.ToArray();
         }
 
         public void Update(tøj item)

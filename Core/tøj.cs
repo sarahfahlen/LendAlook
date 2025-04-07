@@ -11,6 +11,8 @@ public class tøj
     public string beskrivelse { get; set; } = "";
     public string img { get; set; } = "";
     public bruger ejer { get; set; }
+    public int? ejerId { get; set; } = 0;
     public bruger låner { get; set; }
+    public int? lånerId { get; set; } = 0;
     public DateOnly slutDato { get; set; }
 }
