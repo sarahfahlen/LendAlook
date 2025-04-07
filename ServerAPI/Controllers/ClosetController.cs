@@ -40,7 +40,7 @@ public class ClosetController
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] bool isDone)
         {
-            var existingItem = todoRepo.GetAll().FirstOrDefault(t => t.Id == id);
+            var existingItem = todoRepo.GetAll().FirstOrDefault(t => t.id == id);
             if (existingItem == null)
                 return NotFound("ToDo item not found");
 
