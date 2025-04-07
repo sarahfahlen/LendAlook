@@ -15,22 +15,22 @@ public class ClosetServiceServer : IClosetService
     
     public async Task<tøj[]> GetAll()
     {
-        return await client.GetFromJsonAsync<tøj[]>($"{serverUrl}/api/closetPage");
+        return await client.GetFromJsonAsync<tøj[]>($"{serverUrl}/api/closet");
     }
     
     public async Task AddItem(tøj closet)
     {
-        await client.PostAsJsonAsync<tøj>($"{serverUrl}/api/closetPage", closet);
+        await client.PostAsJsonAsync<tøj>($"{serverUrl}/api/closet", closet);
     }
     
     public async Task DeleteById(int id)
     {
-        await client.DeleteAsync($"{serverUrl}/api/closetPage/{id}");
+        await client.DeleteAsync($"{serverUrl}/api/closet/{id}");
     }
 
     public async Task UpdateItem(tøj item)
     {
-        await client.PutAsJsonAsync($"{serverUrl}/api/closetPage", item);
+        await client.PutAsJsonAsync($"{serverUrl}/api/closet", item);
     }
 
 
