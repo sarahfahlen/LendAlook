@@ -32,10 +32,12 @@ public class ClosetServiceMock : IClosetService
 
    public async Task UpdateItem(tøj item)
    {
+      var index = altTøj.FindIndex(t => t.id == item.id); //finder det objekt hvor ID matcher, og tjekker dets index (plads)
+      if (index != -1) //hvis index =-1 betyder det at objektet ikke findes - derfor tjekkes der her om der er et match
+      {
+         altTøj[index] = item; //hvis der er match, laves det objekt vi fandt om til det vi sender med (det opdaterede)
+      }
       
-      tøj tøjOpdatering = altTøj.FirstOrDefault(t => t.id == item.id);
-
-      //her skal kode til at opdatere tøjOpdatering skrives
    }
 
    public async Task BookItem(tøj item, DateOnly slut)
