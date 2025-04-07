@@ -12,6 +12,15 @@ public class LoginServiceClientSide : ILoginService
         localStorage = ls;
     }
 
+    public static bruger rip = new bruger
+        { id = 1, brugernavn = "rip", password = "1234", email = "rip@rip.com", mobil = 76546789 };
+
+    public static bruger rap = new bruger
+        { id = 2, brugernavn = "rap", password = "4321", email = "rap@rap.com", mobil = 87907652 };
+
+    public static bruger rup = new bruger
+        { id = 3, brugernavn = "rup", password = "qwerty", email = "rup@rup.com", mobil = 64572358 };
+
     public async Task<bruger?> GetUserLoggedIn() {
         bruger? res = await localStorage.GetItemAsync<bruger>("user");
         return res;
@@ -29,12 +38,8 @@ public class LoginServiceClientSide : ILoginService
         return false;
     }
     
-    private List<bruger> users = new List<bruger>()
-    {
-        new bruger { id = 1, brugernavn = "rip",password = "1234", email = "rip@rip.com", mobil = 76546789},
-        new bruger { id = 2, brugernavn = "rap", password = "4321", email = "rap@rap.com", mobil = 87907652},
-        new bruger { id = 3, brugernavn = "rup", password = "qwerty", email = "rup@rup.com", mobil = 64572358}
-    };
+    public List<bruger> users = new List<bruger>{rip, rap, rup};
+    
     protected virtual async Task<bruger?> Validate(string username, string password)
     {
         foreach (bruger u in users)

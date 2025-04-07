@@ -11,7 +11,7 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="col-md-6 mb-3">
-            <label for="kategori"> Kategori </label>
+            <label for="kategori"> Kategori</label>
             <InputSelect id="kategori" @bind-Value="aItem.type" class="form-control">
                 @foreach (var anOption in options)
                 {
@@ -57,6 +57,7 @@
     <tbody>
     @foreach (var item in items)
     {
+        Console.WriteLine($"Item Owner ID: {item.ejer?.id}, Logged-in ID: {loggedIn?.id}");
         <tr>
             <td>@item.type</td>
             <td>@item.størrelse</td>
@@ -65,18 +66,20 @@
             <td>@item.beskrivelse</td>
             <td>@item.reserveret</td>
             <!-- her skal tilføjes kontaktoplysninger og billede -->
-            <td><button @onclick="() => Delete(item)">Slet denne item</button></td> <!-- her skal if statement på-->
-            <td><button @onclick="() => Update(item)">Rediger denne item</button></td><!-- her skal if statement på-->
+            
+            @if (loggedIn?.id == item.ejer?.id)
+            {
+                <td><button @onclick="() => Delete(item)">Slet denne item</button></td>
+                <td><button @onclick="() => Update(item)">Rediger denne item</button></td>
+            }
             <td><button @onclick="() => Book(item)">Book denne item</button></td> <!-- her skal noget dato valg på-->
-                <!-- her skal værdien af den der booker tøjet bindes - måske?? -->
+            <!-- her skal værdien af den der booker tøjet bindes - måske?? -->
         </tr>
     }
     </tbody>
 </table>
 
 <button @onclick="Open">Tilføj nyt tøj</button>
-<!-- her skal værdien af den der opretter tøjet bindes - i forhold til kontaktoplysninger-->
-
 
 @code {
     ModalDialog? addToDialog { get; set; }
@@ -84,15 +87,16 @@
     private string[] options = {"Overdele", "Bukser", "Nederdele", "Kjoler", "Andet" };
     private List<tøj> items = new();
     private bool isEditMode = false; //bruges til at skelne mellem tilføj og rediger item
+    private bruger? loggedIn; //gemmer den bruger som er logget ind
 
     protected override async Task OnInitializedAsync()
     {
-        var loggedIn = await lService.GetUserLoggedIn();
-        if (loggedIn is null)
+        loggedIn = await lService.GetUserLoggedIn();
+        if (loggedIn == null)
         {
             navManager.NavigateTo("loginPage/closetPage");
+            return;
         }
-
         await GetAll();
     }
     private void Open()
@@ -116,6 +120,7 @@
         else //hvis vi er i tilføjelses "mode" sker dette
         {
             items.Add(aItem); //bethandler visningen
+            aItem.ejer = loggedIn;
             await cService.AddItem(aItem);   
         }
         aItem = new tøj();
