@@ -83,6 +83,7 @@
     private tøj aItem = new();
     private string[] options = {"Overdele", "Bukser", "Nederdele", "Kjoler", "Andet" };
     private List<tøj> items = new();
+    private bool isEditMode = false; //bruges til at skelne mellem tilføj og rediger item
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,6 +97,8 @@
     }
     private void Open()
     {
+        isEditMode = false;
+        aItem = new tøj(); 
         addToDialog.Open();
     }
     private async Task GetAll()
@@ -105,11 +108,19 @@
     }
     
     private async Task HandleSubmit()
-    { 
-        items.Add(aItem); //bethandler visningen
-        await cService.AddItem(aItem);
+    {
+        if (isEditMode == true) //hvis vi er i redigerings "mode" sker dette
+        {
+            await cService.UpdateItem(aItem);
+        }
+        else //hvis vi er i tilføjelses "mode" sker dette
+        {
+            items.Add(aItem); //bethandler visningen
+            await cService.AddItem(aItem);   
+        }
         aItem = new tøj();
         addToDialog.Close();
+        await GetAll();
     }
     
     private async Task Delete(tøj item)
@@ -120,8 +131,9 @@
     
     private async Task Update(tøj item)
     {
-        //noget kode der tillader redigering her - både visning og backend
-        await cService.UpdateItem(item);
+        isEditMode = true;
+        aItem = item;
+        addToDialog.Open();
     }
     private async Task Book(tøj item)
     {
