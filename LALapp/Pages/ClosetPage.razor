@@ -31,6 +31,10 @@
             <label for="Mærke">Mærke</label>
             <InputText id="Mærke" @bind-Value="aItem.mærke" class="form-control" />
         </div>
+        <div class="col-md-2 mb-3">
+            <label for="Reserveret">Reserveret?</label>
+            <InputCheckbox id="Reserveret" @bind-Value="aItem.reserveret" class="form-control" />
+        </div>
         <div class="col-md-12 mb-3">
             <label for="Description">Beskrivelse</label>
             <InputTextArea id="Description" @bind-Value="aItem.beskrivelse" class="form-control" />
@@ -50,7 +54,7 @@
         <th>Farve</th>
         <th>Mærke</th>
         <th>Beskrivelse</th>
-        <th>Ledig?</th><!-- her skal if statement på med dato hvis ikke ledig-->
+        <th>Tilgængelig?</th>
         <!-- her skal tilføjes kontaktoplysninger og billede -->
     </tr>
     </thead> 
@@ -64,7 +68,12 @@
             <td>@item.farve</td>
             <td>@item.mærke</td>
             <td>@item.beskrivelse</td>
-            <td>@item.reserveret</td>
+            <td>@item.reserveret
+            @if (item.reserveret == true)
+            {
+                <p>Ledig igen d. @item.slutDato;</p>
+            }
+                </td>
             <!-- her skal tilføjes kontaktoplysninger og billede -->
             
             @if (loggedIn?.id == item.ejer?.id)
@@ -72,14 +81,29 @@
                 <td><button @onclick="() => Delete(item)">Slet denne item</button></td>
                 <td><button @onclick="() => Update(item)">Rediger denne item</button></td>
             }
-            <td><button @onclick="() => Book(item)">Book denne item</button></td> <!-- her skal noget dato valg på-->
-            <!-- her skal værdien af den der booker tøjet bindes - måske?? -->
+            else
+            {
+                @if (item.reserveret == false)
+                {
+                    <td><button @onclick="() => Book(item)">Book denne item</button></td>
+                }
+            }
         </tr>
     }
     </tbody>
 </table>
 
 <button @onclick="Open">Tilføj nyt tøj</button>
+
+<ModalDialog @ref="@bookDialog" Title="Vælg afleveringsdato">
+    <div class="p-3">
+        <label for="slutDato">Afleveringsdato:</label>
+        <InputDate @bind-Value="valgtDato" id="slutDato" class="form-control" />
+        <div class="mt-3">
+            <button @onclick="BekræftBooking">Bekræft</button>
+        </div>
+    </div>
+</ModalDialog>
 
 @code {
     ModalDialog? addToDialog { get; set; }
@@ -88,6 +112,9 @@
     private List<tøj> items = new();
     private bool isEditMode = false; //bruges til at skelne mellem tilføj og rediger item
     private bruger? loggedIn; //gemmer den bruger som er logget ind
+    ModalDialog? bookDialog { get; set; }
+    private DateOnly valgtDato = DateOnly.FromDateTime(DateTime.Today);
+    private tøj? valgtItem;
 
     protected override async Task OnInitializedAsync()
     {
@@ -142,10 +169,21 @@
     }
     private async Task Book(tøj item)
     {
-        item.reserveret = !item.reserveret; //ændrer status
-        DateOnly slut = item.slutDato;
-        await cService.BookItem(item, slut);
-        await GetAll();
+        valgtItem = item;
+        valgtDato = DateOnly.FromDateTime(DateTime.Today);
+        bookDialog?.Open();
+    }
+    
+    private async Task BekræftBooking()
+    {
+        if (valgtItem != null)
+        {
+            valgtItem.reserveret = true; //ændrer reserveret til true
+            valgtItem.slutDato = valgtDato; //sætter slutdato til den valgte dato i kalenderen
+            await cService.BookItem(valgtItem, valgtDato); //sender til service, som opdaterer med valgte værdier
+            bookDialog?.Close();
+            await GetAll();
+        }
     }
 
     private async Task Filter(string? type, string? farve, string? størrelse, bruger? udlåner, bool? ledig)
