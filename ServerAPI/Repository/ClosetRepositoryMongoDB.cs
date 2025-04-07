@@ -12,7 +12,7 @@ namespace ServerAPI.Repository
         
         private IMongoClient client;
         private readonly IMongoCollection<tøj> tøjcollection;
-        private readonly IMongoCollection<tøj> usercollection;
+        private readonly IMongoCollection<bruger> usercollection;
 
         public ClosetRepositoryMongoDB()
         {
@@ -38,9 +38,12 @@ namespace ServerAPI.Repository
             // Provide the name of the database and collection you want to use.
             var dbName = "LALCloset";
             var collectionName = "Clothes";
+            var collectionUser = "Users";
 
             tøjcollection = client.GetDatabase(dbName)
-                .GetCollection<tøj>(collectionName);
+                .GetCollection<tøj>(collectionName); 
+            usercollection = client.GetDatabase(dbName)
+                .GetCollection<bruger>(collectionUser);
         }
 
         public void Add(tøj item)
@@ -70,15 +73,27 @@ namespace ServerAPI.Repository
                 .DeleteOne(Builders<tøj>.Filter.Where(r => r.id == id));
         }
         
-        public tøj[] GetAll() {
+        public tøj[] GetAll()
+        {
             var noFilter = Builders<tøj>.Filter.Empty;
-            var items = tøjcollection.Find(noFilter).ToList();
+            var items = tøjcollection.Find(noFilter).ToList();  // Henter alle tøj-objekter
+
             foreach (var item in items)
             {
-                var item.ejer = usercollection(id skal passe til item.ejerId);
+                // Henter bruger baseret på ejerId fra tøj-objektet
+                if (item.ejerId.HasValue)  // Tjekker om ejerId er sat
+                {
+                    var ejer = usercollection.Find(u => u.id == item.ejerId.Value).FirstOrDefault();  // Henter bruger baseret på ejerId
+                    if (ejer != null)
+                    {
+                        item.ejer = ejer;  // Tildeler ejer til tøj-objektet
+                    }
+                }
             }
-            return items.ToArray();
+
+            return items.ToArray();  // Returnerer tøj-objekterne som array
         }
+
 
         public void Update(tøj item)
         {

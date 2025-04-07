@@ -5,7 +5,7 @@ using Core;
 namespace ServerAPI.Controllers;
 
 [ApiController]
-[Route("api/closetPage")]
+[Route("api/closet")]
 public class ClosetController : ControllerBase
 {
     private IClosetRepository closetRepo;
