@@ -6,4 +6,6 @@ public interface ILoginService
     Task<bruger> GetUserLoggedIn();
     
     Task<bool> Login(string brugernavn, string password);
+    
+    Task<bruger[]> GetAll();
 }

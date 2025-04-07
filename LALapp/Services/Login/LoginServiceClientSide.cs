@@ -49,6 +49,9 @@ public class LoginServiceClientSide : ILoginService
 
         return null;
     }
-
     
+    public async Task<bruger[]> GetAll()
+    {
+        return users.ToArray();
+    }
 }

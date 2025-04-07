@@ -1,6 +1,39 @@
 @page "/membersPage"
-<h3>membersPage</h3>
+@using Core
+@inject NavigationManager navManager
+@inject ILoginService lService
+<h3>Medlemmer af vores klub</h3>
+
+<ul class="user-list">
+    @foreach (bruger user in users)
+    {
+        <li class="user-item">
+            <div><strong>Brugernavn:</strong> @user.brugernavn</div>
+            <div><strong>Mobil:</strong> @user.mobil</div>
+            <div><strong>Email:</strong> @user.email</div>
+        </li>
+    }
+</ul>
 
 @code {
+    private bruger? loggedIn; //gemmer den bruger som er logget ind
+    private List<bruger> users = new();
     
+    protected override async Task OnInitializedAsync()
+    {
+        loggedIn = await lService.GetUserLoggedIn();
+        if (loggedIn == null)
+        {
+            navManager.NavigateTo("loginPage/closetPage");
+            return;
+        }
+
+        await GetAll();
+    }
+
+    private async Task GetAll()
+    {
+        bruger[] users2 = await lService.GetAll();
+        users = users2.ToList();
+    }
 }
