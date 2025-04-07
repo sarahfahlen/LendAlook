@@ -1,0 +1,183 @@
+/* Basis layout */
+.closet-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #fffefc;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.closet-intro {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #4a4a4a;
+}
+
+/* Knapper */
+.add-button,
+.submit-button,
+.table button {
+    background-color: #7b8f78;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.add-button:hover,
+.submit-button:hover,
+.table button:hover {
+    background-color: #6b7d69;
+}
+
+/* Tabel */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.table thead th {
+    background-color: #7b8f78 !important;
+    color: white !important;
+}
+
+.table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f3eee7;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #fcfaf7;
+}
+
+.table td:last-child {
+    white-space: nowrap;
+}
+
+/* Billede */
+.item-image {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Formular */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.form-group {
+    flex: 1 1 45%;
+    min-width: 200px;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #3d3d3d;
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select,
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #7b8f78;
+    outline: none;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Checkbox */
+.checkbox-group {
+    flex-basis: 100%;
+    margin-top: 0.5rem;
+}
+
+.custom-checkbox {
+    position: relative;
+    padding-left: 2rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    user-select: none;
+    display: inline-block;
+    color: #333;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.2rem;
+    width: 1.2rem;
+    background-color: #fff;
+    border: 2px solid #7b8f78;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: #7b8f78;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.00016 10.8002L3.20016 8.0002L2.26683 8.93354L6.00016 12.6669L14.0002 4.66687L13.0668 3.73354L6.00016 10.8002Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Knap i højre hjørne */
+.form-footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+}
+
+/* Validation */
+.validation-message {
+    color: #b94a48;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+

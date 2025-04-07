@@ -1,47 +1,108 @@
+/* Struktur */
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f8f6; /* meget lys jordtone */
+    color: #333;
 }
 
 main {
     flex: 1;
+    padding: 1rem;
 }
 
+/* Sidebar */
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-color: #7b8f78; /* lys grøn, symboliserer bæredygtighed */
+    border-right: 1px solid #dcdcdc;
+    padding: 1rem;
 }
 
+/* Topbar */
 .top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
+    background-color: #fdfaf5; /* varm lys jordtone */
+    border-bottom: 1px solid #dcdcdc;
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
     align-items: center;
+    padding: 0 1.5rem;
+    color: #333;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+/* Links i topbar */
+.top-row ::deep a,
+.top-row ::deep .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: #7b8f78; /* naturlig grøn */
+    font-weight: 500;
+}
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+.top-row ::deep a:hover,
+.top-row ::deep .btn-link:hover {
+    text-decoration: underline;
+    color: #7b8f78;
+}
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+/* Sidebar navigation */
+.nav-item {
+    font-size: 0.95rem;
+    padding-bottom: 0.5rem;
+}
 
+.nav-item:first-of-type {
+    padding-top: 1rem;
+}
+
+.nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
+
+.nav-item ::deep a {
+    color: #4a7043;
+    border-radius: 6px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.nav-item ::deep a.active {
+    background-color: #dcefe2;
+    color: #3c5e36;
+    font-weight: bold;
+}
+
+.nav-item ::deep a:hover {
+    background-color: #e6f3ea;
+    color: #3c5e36;
+}
+
+/* Ikoner */
+.bi {
+    display: inline-block;
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    top: -1px;
+    background-size: cover;
+}
+
+/* Mobilvenlighed */
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
+    .top-row ::deep a,
+    .top-row ::deep .btn-link {
         margin-left: 0;
     }
 }
@@ -70,8 +131,34 @@ main {
         width: 0;
     }
 
-    .top-row, article {
+    .top-row,
+    article {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .collapse {
+        display: block;
+    }
+
+    .nav-scrollable {
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}
+
+/* Toggler (mobilmenu) */
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Juster navbar-brand */
+.navbar-brand {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #4a7043;
 }
