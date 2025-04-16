@@ -9,7 +9,6 @@ namespace ServerAPI.Repository
 {
     public class ClosetRepositoryMongoDB : IClosetRepository
     {
-        
         private IMongoClient client;
         private readonly IMongoCollection<tøj> tøjcollection;
         private readonly IMongoCollection<bruger> usercollection;
@@ -19,10 +18,10 @@ namespace ServerAPI.Repository
             // atlas database
             var password = "LAL1234";
             var mongoUri = $"mongodb+srv://App:{password}@lalapp.mgblbd3.mongodb.net/?appName=LALApp";
-           
+
             //local mongodb
             //var mongoUri = "mongodb://localhost:27017/";
-            
+
             try
             {
                 client = new MongoClient(mongoUri);
@@ -33,7 +32,8 @@ namespace ServerAPI.Repository
                                   "Atlas cluster. Check that the URI includes a valid " +
                                   "username and password, and that your IP address is " +
                                   $"in the Access List. Message: {e.Message}");
-                throw; }
+                throw;
+            }
 
             // Provide the name of the database and collection you want to use.
             var dbName = "LALApp";
@@ -41,7 +41,7 @@ namespace ServerAPI.Repository
             var collectionUser = "Users";
 
             tøjcollection = client.GetDatabase(dbName)
-                .GetCollection<tøj>(collectionName); 
+                .GetCollection<tøj>(collectionName);
             usercollection = client.GetDatabase(dbName)
                 .GetCollection<bruger>(collectionUser);
         }
@@ -53,14 +53,16 @@ namespace ServerAPI.Repository
             {
                 max = MaxId();
             }
+
             item.id = max + 1;
             // alternative:
             //int newid = Guid.NewGuid().GetHashCode();
             //item.Id = newid;
             tøjcollection.InsertOne(item);
         }
-        
-        private int MaxId() {
+
+        private int MaxId()
+        {
             /*var noFilter = Builders<BEBike>.Filter.Empty;
             var elementWithHighestId = collection.Find(noFilter).SortByDescending(r => r.Id).Limit(1).ToList()[0];
             return elementWithHighestId.Id;*/
@@ -72,26 +74,25 @@ namespace ServerAPI.Repository
             var deleteResult = tøjcollection
                 .DeleteOne(Builders<tøj>.Filter.Where(r => r.id == id));
         }
-        
+
         public tøj[] GetAll()
         {
             var noFilter = Builders<tøj>.Filter.Empty;
-            var items = tøjcollection.Find(noFilter).ToList();  // Henter alle tøj-objekter
+            var items = tøjcollection.Find(noFilter).ToList(); // Henter alle tøj-objekter
 
             foreach (var item in items)
             {
-                
-                if (item.ejerId.HasValue)  
+                if (item.ejerId.HasValue)
                 {
-                    var ejer = usercollection.Find(u => u.id == item.ejerId.Value).FirstOrDefault(); 
+                    var ejer = usercollection.Find(u => u.id == item.ejerId.Value).FirstOrDefault();
                     if (ejer != null)
                     {
-                        item.ejer = ejer;  // Tildeler ejer til tøj-objektet
+                        item.ejer = ejer; // Tildeler ejer til tøj-objektet
                     }
                 }
             }
 
-            return items.ToArray();  // Returnerer tøj-objekterne som array
+            return items.ToArray(); // Returnerer tøj-objekterne som array
         }
 
 
@@ -107,7 +108,12 @@ namespace ServerAPI.Repository
                 .Set(x => x.slutDato, item.slutDato)
                 .Set(x => x.reserveret, item.reserveret);
             tøjcollection.UpdateOne(x => x.id == item.id, updateDef);
-            
+        }
+
+        public bruger[] GetAllUsers()
+        {
+            var filter = Builders<bruger>.Filter.Empty;
+            return usercollection.Find(filter).ToList().ToArray();
         }
     }
 }

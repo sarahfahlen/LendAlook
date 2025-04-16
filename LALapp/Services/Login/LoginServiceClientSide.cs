@@ -5,7 +5,7 @@ namespace LALapp.Services;
 
 public class LoginServiceClientSide : ILoginService
 {
-    private ILocalStorageService localStorage {get; set;}
+    private ILocalStorageService localStorage { get; set; }
 
     public LoginServiceClientSide(ILocalStorageService ls)
     {
@@ -16,12 +16,13 @@ public class LoginServiceClientSide : ILoginService
         { id = 1, brugernavn = "rip", password = "1234", email = "rip@rip.com", mobil = 76546789 };
 
     public static bruger rap = new bruger
-        { id = 2, brugernavn = "rap", password = "4321", email = "rap@rap.com", mobil = 87907652 };
+        { id = 2, brugernavn = "rrp", password = "4321", email = "rap@rap.com", mobil = 87907652 };
 
     public static bruger rup = new bruger
         { id = 3, brugernavn = "rup", password = "qwerty", email = "rup@rup.com", mobil = 64572358 };
 
-    public async Task<bruger?> GetUserLoggedIn() {
+    public async Task<bruger?> GetUserLoggedIn()
+    {
         bruger? res = await localStorage.GetItemAsync<bruger>("user");
         return res;
     }
@@ -35,11 +36,12 @@ public class LoginServiceClientSide : ILoginService
             await localStorage.SetItemAsync("user", u);
             return true;
         }
+
         return false;
     }
-    
-    public List<bruger> users = new List<bruger>{rip, rap, rup};
-    
+
+    public static List<bruger> users = new List<bruger> { rip, rap, rup };
+
     protected virtual async Task<bruger?> Validate(string username, string password)
     {
         foreach (bruger u in users)
@@ -49,7 +51,7 @@ public class LoginServiceClientSide : ILoginService
 
         return null;
     }
-    
+
     public async Task<bruger[]> GetAll()
     {
         return users.ToArray();

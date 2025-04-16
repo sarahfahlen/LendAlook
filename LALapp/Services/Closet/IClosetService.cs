@@ -1,5 +1,7 @@
 using Core;
+
 namespace LALapp;
+
 public interface IClosetService
 {
     Task<tøj[]> GetAll();
@@ -9,4 +11,5 @@ public interface IClosetService
     Task BookItem(tøj item, DateTime? slutDato);
     Task FilterBy(string? type, string? farve, string? størrelse, bruger? udlåner, bool? ledig);
 
+    Task<bruger[]> GetAllUsers();
 }

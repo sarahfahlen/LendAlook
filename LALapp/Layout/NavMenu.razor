@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Core
+@inject ILoginService lService
+@inject NavigationManager navManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">LALapp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -14,22 +19,64 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> FællesSkab
             </NavLink>
         </div>
-    <div class="nav-item px-3">
-        <NavLink class="nav-link" href="membersPage">
-            <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Medlemsside
-        </NavLink>
-    </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="membersPage">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Medlemsside
+            </NavLink>
+        </div>
     </nav>
+
+
+</div>
+<div class="logged-in-box px-3 mt-5">
+    @if (currentUser != null)
+    {
+        <div>🔐 Logget ind som: <strong>@currentUser.brugernavn</strong></div>
+        <button class="logout-button mt-2" @onclick="LogUd">Log ud</button>
+    }
+    else
+    {
+        <div>🔒 Du er ikke logget ind</div>
+        <button class="login-button mt-2" @onclick="GotoLogin">Log ind</button>
+    }
 </div>
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private bruger? currentUser;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (currentUser == null)
+        {
+            var user = await lService.GetUserLoggedIn();
+            if (user != null)
+            {
+                currentUser = user;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task LogUd()
+    {
+        await localStorage.RemoveItemAsync("user");
+        currentUser = null;
+        navManager.NavigateTo("/", forceLoad: true);
+    }
+
+    private void GotoLogin()
+    {
+        navManager.NavigateTo("/loginPage/closetPage", forceLoad: true);
+    }
+
+}
 
 }

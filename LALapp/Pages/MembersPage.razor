@@ -2,38 +2,44 @@
 @using Core
 @inject NavigationManager navManager
 @inject ILoginService lService
+@inject IClosetService ClosetService
+
 <h3>Medlemmer af vores klub</h3>
 
-<ul class="user-list">
-    @foreach (bruger user in users)
-    {
-        <li class="user-item">
-            <div><strong>Brugernavn:</strong> @user.brugernavn</div>
-            <div><strong>Mobil:</strong> @user.mobil</div>
-            <div><strong>Email:</strong> @user.email</div>
-        </li>
-    }
-</ul>
+@if (brugere == null)
+{
+    <p>Indlæser medlemmer...</p>
+}
+else
+{
+    <ul class="user-list">
+        @foreach (var b in brugere)
+        {
+            <li class="user-item">
+                <div><strong>Navn:</strong> @b.navn</div>
+                <div><strong>Brugernavn:</strong> @b.brugernavn</div>
+                <div><strong>Email:</strong> @b.email</div>
+                <div><strong>Telefonnummer:</strong> @b.mobil</div>
+            </li>
+        }
+    </ul>
+}
 
 @code {
-    private bruger? loggedIn; //gemmer den bruger som er logget ind
-    private List<bruger> users = new();
-    
+    private bruger? loggedIn;
+    private bruger[]? brugere;
+
     protected override async Task OnInitializedAsync()
     {
         loggedIn = await lService.GetUserLoggedIn();
+
         if (loggedIn == null)
         {
             navManager.NavigateTo("loginPage/closetPage");
             return;
         }
 
-        await GetAll();
+        brugere = await ClosetService.GetAllUsers();
     }
 
-    private async Task GetAll()
-    {
-        bruger[] users2 = await lService.GetAll();
-        users = users2.ToList();
-    }
 }
