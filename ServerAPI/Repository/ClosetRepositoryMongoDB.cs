@@ -112,8 +112,8 @@ namespace ServerAPI.Repository
 
         public bruger[] GetAllUsers()
         {
-            var filter = Builders<bruger>.Filter.Empty;
-            return usercollection.Find(filter).ToList().ToArray();
+            var nofilter = Builders<bruger>.Filter.Empty;
+            return usercollection.Find(nofilter).ToList().ToArray();
         }
     }
 }
