@@ -16,7 +16,7 @@ public class LoginServiceClientSide : ILoginService
         { id = 1, brugernavn = "rip", password = "1234", email = "rip@rip.com", mobil = 76546789 };
 
     public static bruger rap = new bruger
-        { id = 2, brugernavn = "rrp", password = "4321", email = "rap@rap.com", mobil = 87907652 };
+        { id = 2, brugernavn = "rap", password = "4321", email = "rap@rap.com", mobil = 87907652 };
 
     public static bruger rup = new bruger
         { id = 3, brugernavn = "rup", password = "qwerty", email = "rup@rup.com", mobil = 64572358 };
